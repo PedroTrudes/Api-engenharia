@@ -1,6 +1,9 @@
 const route = require('express').Router();//ja inicializando ela na variavel route
 const userController = require('../controllers/user.controller');
 
+route.post("/create", userController.create)
+
+
 //http://localhost:3000/number/soma =>  number vem do index.js
 route.get("/soma", userController.soma)
 
