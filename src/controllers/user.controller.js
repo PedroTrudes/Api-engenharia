@@ -3,10 +3,11 @@ const mongoose = require('mongoose');
 
 const create = async (req, res) => {
     const { name, username, email, password } = req.body;
+   
     if (!name || !username || !email || !password) {
-        res.status(400).send({ message: "Envio de formulario faltando dados" }).status(400)
+        res.status(400).send({ message: "Envio de formulario faltando dados" })
     }
-
+    
     const user = await userService.createService(req.body)//Criando o campo com os dados no body
 
     //Menssagem de erro na criação de um novo usuario
@@ -28,13 +29,12 @@ const create = async (req, res) => {
 
 const findAll = async (req, res) => {
     const users = await userService.findAllService();
-
     if (users.length === 0) {
         return res.status(400).send({ message: "Não a usuarios cadastrados" })
     }
 
     res.send(users)
-}
+};
 
 const findById = async (req, res ) => {
     const idUser = req.params.id;
@@ -50,6 +50,37 @@ const findById = async (req, res ) => {
     }
 
     res.send(user);
-}
+};
 
-module.exports = { create, findAll, findById }; //Consigo passar somente oq eu quero exportar
+const update = async (req, res) => {
+    const idUser = req.params.id;
+
+    const {name, username, email, password } = req.body;
+
+    if(!name && !username && !email && !password){
+        res.status(400).send({message: "Atualize pelo menos um campo do formulario"});
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(idUser)){
+        res.status(400).send({message: "Id não encontrado"})
+    }
+
+    const user = await userService.findByIdService(idUser);
+
+    if(!user){
+        return res.status(400).send({message: "Usuario nao encontrado"})
+    }
+
+    //atualizando os dados do usuario
+    await userService.updateService(
+        idUser,
+        name,
+        username,
+        email,
+        password
+    );
+
+    res.send({message: "Usuario atualizado com sucesso!"})
+};
+
+module.exports = { create, findAll, findById, update }; //Consigo passar somente oq eu quero exportar
