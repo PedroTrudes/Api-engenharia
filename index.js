@@ -9,6 +9,7 @@ connectDatabase();//executando o conect com o database
 app.use(express.json());//express sabe trabalhar com JSON
 
 app.use("/user", userRoute);//rota de user
+app.use("/", userRoute); //rota de login com usuario
 
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
 
