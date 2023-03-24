@@ -2,6 +2,8 @@ const userService = require('../services/user.service');
 const mongoose = require('mongoose');
 
 const create = async (req, res) => {
+   
+   try { 
     const { name, username, email, password } = req.body;
    
     if (!name || !username || !email || !password) {
@@ -25,24 +27,36 @@ const create = async (req, res) => {
             email
         },
     });
+    } catch(err){
+        res.status(500).send({message: err.message})
+    }
 };
 
 const findAll = async (req, res) => {
-    const users = await userService.findAllService();
+   try { const users = await userService.findAllService();
     if (users.length === 0) {
         return res.status(400).send({ message: "Não a usuarios cadastrados" })
     }
 
-    res.send(users)
+    res.send(users)}
+    catch(err) {
+        res.status(500).send({message: err.message})
+    }
 };
 
 const findById = async (req, res ) => {
     //fazendo tudo pelo middlewares
-    const user = req.user;
-    res.send(user);
+    try {
+        const user = req.user;
+        res.send(user);    
+    } catch (err) {
+        res.status(500).send({message: err.message})
+    }
+    
 };
 
 const update = async (req, res) => {
+    try {
     const {name, username, email, password } = req.body;
 
     if(!name && !username && !email && !password){
@@ -59,8 +73,13 @@ const update = async (req, res) => {
         email,
         password
     );
-
     res.send({message: "Usuario atualizado com sucesso!"})
+    
+    } catch (err) {
+        res.status(500).send({message: err.message})
+    }
+
+    
 };
 
 module.exports = { create, findAll, findById, update }; //Consigo passar somente oq eu quero exportar

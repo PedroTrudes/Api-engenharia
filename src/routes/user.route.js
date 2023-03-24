@@ -8,10 +8,3 @@ route.get("/list/:id", validId, validUser ,userController.findById)//Rota de peg
 route.patch("/atualizar/:id", validId, validUser ,userController.update)
 
 module.exports = route
-
-//http://localhost:3000/number/soma =>  number vem do index.js
-//route.get("/soma", userController.soma)
-
-//aqui prefixamos o primeiro nome da rota e em use route passamos a rota 
-//que vai ser usada http://localhost:3000/user/nome
-//route.get("/nome", userController.myName)
