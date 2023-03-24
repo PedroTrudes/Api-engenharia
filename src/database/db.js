@@ -4,12 +4,13 @@ import mongoose from'mongoose';
 const connectDatabase = () => {
     console.log("Estamos connectando no banco de dados")
 
-    mongoose.connect("mongodb+srv://root:root@cluster0.huwas4v.mongodb.net/?retryWrites=true&w=majority",
+    mongoose.connect(process.env.MONGODB_URI, //valor do banco tem que ser escondido
         { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
             console.log("Mongo DB Atlas conectado");
         }).catch((error) => {
             console.log(error);
         })
 };
+
 
 export default connectDatabase;
