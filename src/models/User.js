@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 //criando schemas de como vai ser o banco sem relacionamento de tabela
 const UserSchema = new mongoose.Schema({
@@ -23,4 +23,4 @@ const UserSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", UserSchema);
 
-module.exports = User;
+export default User;
