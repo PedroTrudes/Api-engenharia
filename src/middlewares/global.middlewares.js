@@ -19,6 +19,7 @@ export const validUser = async (req, res, next) => {
 
     if(!user) {
         return res.status(400).send({message: "Usuario nao encontrado"})
+        
     }
 
     req.id = id;

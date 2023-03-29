@@ -1,9 +1,9 @@
 import {createService, findAllService} from "../services/news.service.js";
 
 const createNews = async (req, res) =>{
-    try {
+    try {        
         const {title, text, banner} = req.body;
-
+        
         if(!title || !text || !banner){
             send.status(400).send({message: "Preencha os campos"})
         }
@@ -12,7 +12,7 @@ const createNews = async (req, res) =>{
             title,
             text, 
             banner,
-            user: {_id: "641df7cd5a9781351648dd2b"},
+            user: req.userId,
         });
 
         res.status(201).send({message: "News criada com sucesso"});

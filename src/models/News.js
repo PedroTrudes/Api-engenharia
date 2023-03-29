@@ -19,7 +19,7 @@ const NewsSchema = new mongoose.Schema({
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',//precisa ser obrigatoria mente igual a outra model para referenciar
+        ref: "User",//precisa ser obrigatoria mente igual a outra model para referenciar
         require: true
     },
     likes: {
