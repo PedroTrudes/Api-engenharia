@@ -1,12 +1,4 @@
-import { 
-    createService, 
-    findAllService, 
-    countNews, 
-    topNewsService, 
-    findByIdService, 
-    searchByTitleService,
-    byUserService
-} from "../services/news.service.js";
+import {createService, findAllService, countNews, topNewsService, findByIdService, searchByTitleService, byUserService, updateNewsService} from "../services/news.service.js";
 
 const createNews = async (req, res) => {
     try {
@@ -136,7 +128,7 @@ const findById = async (req, res) => {
     } catch (error) {
         return res.status(500).send({message: error.message})
     }
-}
+};
 
 const searchByTitle = async (req, res) => {
     try {
@@ -164,7 +156,7 @@ const searchByTitle = async (req, res) => {
     } catch (error) {
         return res.status(500).send({message: error.message})
     }
-}
+};
 
 const byUser = async (req, res) => {
     try {
@@ -183,10 +175,35 @@ const byUser = async (req, res) => {
                 username: item.user.username,
             })),
         });
-        
+
     } catch (error) {
         return res.status(500).send({message: error.message});
     }
-}
+};
 
-export { createNews, getAllNews, topNews, findById, searchByTitle, byUser }
+const updateNews = async (req, res) => {
+    try {
+        const {title, text, banner} = req.body;
+        const {id} = req.params;
+
+        if(!title && !text && !banner){
+            return res.status(400).send({message: "Preencha algum campo do formulario"})
+        }
+        
+        const news = await findByIdService(id);
+        //console.log(typeof news.user._id, typeof req.userId) vendo oq esta sendo recebido nessas variaveis 
+
+        //transformando user._id em String para poder fazer essa comparação
+        if(String(news.user._id) !== req.userId){
+            return res.status(401).send({message: "Usuario não autorizado"})
+        }
+        
+        await updateNewsService(id, title, text, banner)
+
+        return res.send({message: "Post atualizado com sucesso!"})
+    } catch (error) {
+        return res.status(500).send({message: error.message})
+    }
+};
+
+export { createNews, getAllNews, topNews, findById, searchByTitle, byUser, updateNews }
