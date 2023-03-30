@@ -1,4 +1,4 @@
-import {createService, findAllService, countNews, topNewsService, findByIdService, searchByTitleService, byUserService, updateNewsService} from "../services/news.service.js";
+import {createService, findAllService, countNews, topNewsService, findByIdService, searchByTitleService, byUserService, updateNewsService, deleteNewsService} from "../services/news.service.js";
 
 const createNews = async (req, res) => {
     try {
@@ -206,4 +206,21 @@ const updateNews = async (req, res) => {
     }
 };
 
-export { createNews, getAllNews, topNews, findById, searchByTitle, byUser, updateNews }
+const deleteNews = async (req, res) =>{
+    try {
+        const {id} = req.params
+        const news = await findByIdService(id)
+
+        if(String(news.user._id) !== req.userId){
+            return res.status(400).send({message: "Você não esta logado, então não pode deletar esse post"});
+        }
+
+        await deleteNewsService(id);
+        return res.send({message: "Dados deletados com sucesso"});
+
+    } catch (error) {
+        return res.status(500).send({message: error.message});
+    }
+}
+
+export { createNews, getAllNews, topNews, findById, searchByTitle, byUser, updateNews, deleteNews }

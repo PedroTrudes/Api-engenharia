@@ -18,5 +18,7 @@ const byUserService = (id) => News.find({user: id}).sort({_id: -1}).populate("us
 
 const updateNewsService = (id, title, text, banner) => News.findOneAndUpdate({_id: id}, {title, text, banner}, {rawResult: true})
 
-export { createService, findAllService, countNews, topNewsService, findByIdService, searchByTitleService, byUserService, updateNewsService }
+const deleteNewsService = (id) => News.findOneAndDelete({_id: id});
+
+export { createService, findAllService, countNews, topNewsService, findByIdService, searchByTitleService, byUserService, updateNewsService, deleteNewsService }
 //tudo que é feito no banco rola aqui "são as querys do sql"

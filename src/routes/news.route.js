@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createNews, getAllNews, topNews, findById, searchByTitle, byUser, updateNews } from '../controllers/news.controller.js'
+import { createNews, getAllNews, topNews, findById, searchByTitle, byUser, updateNews, deleteNews } from '../controllers/news.controller.js'
 import { authMiddleware } from "../middlewares/auth.middlewares.js";
 import {validId} from '../middlewares/global.middlewares.js';
 const router = Router();
@@ -13,5 +13,6 @@ router.get('/byUser', authMiddleware, byUser)
 router.get('/:id', authMiddleware ,findById);
 
 router.patch('/update/:id', authMiddleware, updateNews);
+router.delete('/delete/:id', authMiddleware, deleteNews)
 
 export default router;
