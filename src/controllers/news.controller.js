@@ -1,4 +1,4 @@
-import { createService, findAllService, countNews } from "../services/news.service.js";
+import { createService, findAllService, countNews, topNewsService } from "../services/news.service.js";
 
 const createNews = async (req, res) => {
     try {
@@ -22,6 +22,7 @@ const createNews = async (req, res) => {
 }
 
 const getAllNews = async (req, res) => {
+    //Sistema de paginação na api 
     try {
         let { limit, offset } = req.query;
         limit = Number(limit);
@@ -75,4 +76,30 @@ const getAllNews = async (req, res) => {
     }
 }
 
-export { createNews, getAllNews }
+const topNews = async (req, res) => {
+    try {
+        const news = await topNewsService();   
+        
+        if(!news){
+            return res.status(400).send({message: "Não a news registradas"})
+        }
+
+        res.send({
+            news: {
+                id: news._id,
+                title: news.title,
+                text: news.text,
+                banner: news.banner,
+                likes: news.likes,
+                coments: news.comentes,
+                name: news.user.name,
+                username: news.user.username,
+            },
+        });
+
+    } catch (error) {
+        return res.status(500).send({message: error.message})
+    }
+};
+
+export { createNews, getAllNews, topNews }

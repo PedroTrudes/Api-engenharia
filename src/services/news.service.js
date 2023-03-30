@@ -6,5 +6,7 @@ const findAllService = (offset, limit) => News.find().sort({_id: -1}).skip(offse
 
 const countNews = () => News.countDocuments();
 
-export {createService, findAllService, countNews}
+const topNewsService = () => News.findOne().sort({_id: -1}).populate("user");
+
+export {createService, findAllService, countNews, topNewsService}
 //tudo que é feito no banco rola aqui "são as querys do sql"
