@@ -4,7 +4,9 @@ import {
     countNews, 
     topNewsService, 
     findByIdService, 
-    searchByTitleService } from "../services/news.service.js";
+    searchByTitleService,
+    byUserService
+} from "../services/news.service.js";
 
 const createNews = async (req, res) => {
     try {
@@ -164,4 +166,27 @@ const searchByTitle = async (req, res) => {
     }
 }
 
-export { createNews, getAllNews, topNews, findById, searchByTitle }
+const byUser = async (req, res) => {
+    try {
+        const id = req.userId;
+        const news = await byUserService(id);
+
+        return res.send({
+            results: news.map((item) => ({
+                id: item._id,
+                title: item.title,
+                text: item.text,
+                banner: item.banner,
+                likes: item.likes,
+                coments: item.comentes,
+                name: item.user.name,
+                username: item.user.username,
+            })),
+        });
+        
+    } catch (error) {
+        return res.status(500).send({message: error.message});
+    }
+}
+
+export { createNews, getAllNews, topNews, findById, searchByTitle, byUser }
