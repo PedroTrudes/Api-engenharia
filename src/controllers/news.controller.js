@@ -1,4 +1,4 @@
-import { createService, findAllService, countNews, topNewsService } from "../services/news.service.js";
+import { createService, findAllService, countNews, topNewsService, findByIdService } from "../services/news.service.js";
 
 const createNews = async (req, res) => {
     try {
@@ -19,7 +19,7 @@ const createNews = async (req, res) => {
         res.status(500).send({ message: error.message })
     }
 
-}
+};
 
 const getAllNews = async (req, res) => {
     //Sistema de paginação na api 
@@ -74,7 +74,7 @@ const getAllNews = async (req, res) => {
     } catch (error) {
         res.status(400).send({ message: error.message })
     }
-}
+};
 
 const topNews = async (req, res) => {
     try {
@@ -102,4 +102,32 @@ const topNews = async (req, res) => {
     }
 };
 
-export { createNews, getAllNews, topNews }
+const findById = async (req, res) => {
+    try {
+        const {id} = req.params
+
+        const news = await findByIdService(id);
+
+        if(news.length === 0){
+            return res.status(400).send({message: "Não a postagens desse usuario"})
+        }
+
+        res.send({
+            news: {
+                id: news._id,
+                title: news.title,
+                text: news.text,
+                banner: news.banner,
+                likes: news.likes,
+                coments: news.comentes,
+                name: news.user.name,
+                username: news.user.username,
+            }
+        })
+
+    } catch (error) {
+        return res.status(500).send({message: error.message})
+    }
+}
+
+export { createNews, getAllNews, topNews, findById }
