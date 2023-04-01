@@ -1,4 +1,4 @@
-import {createService, findAllService, countNews, topNewsService, findByIdService, searchByTitleService, byUserService, updateNewsService, deleteNewsService} from "../services/news.service.js";
+import {createService, findAllService, countNews, topNewsService, findByIdService, searchByTitleService, byUserService, updateNewsService, deleteNewsService, likeNewsService, deslikeNewsService} from "../services/news.service.js";
 
 const createNews = async (req, res) => {
     try {
@@ -223,4 +223,22 @@ const deleteNews = async (req, res) =>{
     }
 }
 
-export { createNews, getAllNews, topNews, findById, searchByTitle, byUser, updateNews, deleteNews }
+const likeNews = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const userId = req.userId;
+
+        const newsLike = await likeNewsService(id, userId);
+
+        if(!newsLike) {
+            await deslikeNewsService(id, userId);
+            return res.status(201).send({message: "deslike com sucesso"})
+        }
+        console.log(newsLike);
+        res.send("Curtido com sucesso")
+    } catch (error) {
+        return res.status(500).send({message: error.message})
+    }
+};
+
+export { createNews, getAllNews, topNews, findById, searchByTitle, byUser, updateNews, deleteNews , likeNews}

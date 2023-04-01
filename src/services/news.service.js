@@ -20,5 +20,11 @@ const updateNewsService = (id, title, text, banner) => News.findOneAndUpdate({_i
 
 const deleteNewsService = (id) => News.findOneAndDelete({_id: id});
 
-export { createService, findAllService, countNews, topNewsService, findByIdService, searchByTitleService, byUserService, updateNewsService, deleteNewsService }
+const likeNewsService = (idNews, userId) => News.findOneAndUpdate(
+    {_id: idNews, "likes.userId" : {$nin: [userId] } },  
+    {$push : {likes : {userId, createLike: new Date() } } }
+); 
+
+const deslikeNewsService = (idNews, userId) => News.findOneAndUpdate({_id : idNews}, {$pull: { likes: {userId} } })
+export { createService, findAllService, countNews, topNewsService, findByIdService, searchByTitleService, byUserService, updateNewsService, deleteNewsService, likeNewsService, deslikeNewsService }
 //tudo que é feito no banco rola aqui "são as querys do sql"
