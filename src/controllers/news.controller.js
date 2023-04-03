@@ -1,4 +1,18 @@
-import {createService, findAllService, countNews, topNewsService, findByIdService, searchByTitleService, byUserService, updateNewsService, deleteNewsService, likeNewsService, deslikeNewsService} from "../services/news.service.js";
+import {createService, 
+    findAllService, 
+    countNews, 
+    topNewsService, 
+    findByIdService, 
+    searchByTitleService, 
+    byUserService, 
+    updateNewsService, 
+    deleteNewsService, 
+    likeNewsService, 
+    deslikeNewsService,
+    addCommentService,
+    deleteCommentService,
+    
+} from "../services/news.service.js";
 
 const createNews = async (req, res) => {
     try {
@@ -241,4 +255,60 @@ const likeNews = async (req, res) => {
     }
 };
 
-export { createNews, getAllNews, topNews, findById, searchByTitle, byUser, updateNews, deleteNews , likeNews}
+const addComment = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const userId = req.userId;
+        const {comment} = req.body;
+
+        if(!comment) {
+            return res.status(400).send({message: "Não foi inserido messagem no comentario"});
+        }
+
+        await addCommentService(id, comment, userId);
+
+        return res.status(200).send({message: "Comentario criado com sucesso"})
+
+    } catch (error) {
+        return res.status(500).send({message: error.message})
+    }
+}
+
+
+const deleteComment = async (req,res) => {
+    try {
+        const {idNews, idComment } = req.params;
+        const userId = req.userId;
+
+        const commentDeleted = await deleteCommentService(idNews, idComment, userId);
+
+        const commentFinder = commentDeleted.comentes.find((comment) => comment.idComment === idComment)
+
+        if(!commentFinder){
+            return res.status(400).send({message: "Comentario nao existe"})
+        }
+
+        if(commentFinder.userId !== userId){
+            return res.status(400).send({message: "Você nao pode deletar esse comentario"})
+        }
+
+        return res.status(200).send({message: "Comentario removido com sucesso"})
+    } catch (error) {
+        return res.status(500).send({message: error.message});
+    }
+}
+
+export { 
+    createNews, 
+    getAllNews, 
+    topNews, 
+    findById, 
+    searchByTitle, 
+    byUser, 
+    updateNews, 
+    deleteNews , 
+    likeNews, 
+    addComment, 
+    deleteComment,
+    
+}
